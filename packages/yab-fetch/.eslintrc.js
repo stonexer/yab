@@ -1,6 +1,9 @@
 module.exports = {
   extends: [
-    '@leohxj/eslint-config-dawn-base/typescript',
+    "airbnb-base",
+    'plugin:import/typescript',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:prettier/recommended',
     'prettier/@typescript-eslint'
   ]
