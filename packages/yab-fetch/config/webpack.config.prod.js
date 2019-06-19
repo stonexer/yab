@@ -7,7 +7,6 @@ const baseConfig = require('./webpack.config.base');
 const productionConfig = merge(baseConfig, {
   mode: 'production',
   plugins: [
-    // strip dev-only code in Vue source
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')

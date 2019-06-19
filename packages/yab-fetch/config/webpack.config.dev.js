@@ -35,7 +35,7 @@ const developmentConfig = merge(baseConfig, {
     // publicPath: '/assets/',
     // proxy: {
     //   '/api': {
-    //     target: 'http://leo.wapa.taobao.com:8080',
+    //     target: 'http://localhost:8080',
     //     pathRewrite: { '^/api': '' }
     //   }
     // }
