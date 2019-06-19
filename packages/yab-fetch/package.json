@@ -26,13 +26,10 @@
     "access": "public"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@leohxj/babel-preset-dawn": "^1.0.7",
     "@leohxj/eslint-config-dawn-base": "^1.0.5",
     "@types/node": "^10.14.7",
     "@typescript-eslint/eslint-plugin": "^1.9.0",
     "@typescript-eslint/parser": "^1.9.0",
-    "babel-loader": "^8.0.6",
     "cache-loader": "^3.0.1",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "cross-env": "^5.2.0",
