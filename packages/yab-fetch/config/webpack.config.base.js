@@ -2,7 +2,7 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const { resolve } = require('./utils');
-const projectName = 'dawn-helpers';
+const projectName = 'yab-fetch';
 
 module.exports = {
   entry: {
@@ -32,20 +32,5 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new CaseSensitivePathsPlugin(),
-    new ForkTsCheckerWebpackPlugin()
-  ],
-  optimization: {
-    splitChunks: {
-      chunks: 'initial',
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendor',
-          chunks: 'all'
-        }
-      }
-    }
-  }
+  plugins: [new CaseSensitivePathsPlugin(), new ForkTsCheckerWebpackPlugin()]
 };
