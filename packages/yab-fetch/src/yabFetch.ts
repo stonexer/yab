@@ -1,7 +1,11 @@
 import { YabRequestInit, YabFetcher, MethodType } from './types/index';
 import { getYabRequestInit, createURL, getRequestInit } from './utils/index';
 
-import { Middleware } from './utils/middleware';
+import {
+  RequestInterceptor,
+  ResponseInterceptor,
+  InterceptorManager
+} from './utils/interceptor';
 
 function defaultErrorHandler(err: Error): Error {
   // eslint-disable-next-line no-console
@@ -11,7 +15,8 @@ function defaultErrorHandler(err: Error): Error {
 
 export function createFetch(requestInit?: YabRequestInit): YabFetcher {
   const browserFetch = window.fetch;
-  const _middlewares: Middleware[] = [];
+  const requestInterceptor = new InterceptorManager<RequestInterceptor>();
+  const responseInterceptor = new InterceptorManager<ResponseInterceptor>();
 
   const currentFetch = (async (
     directURL: string,
@@ -27,17 +32,16 @@ export function createFetch(requestInit?: YabRequestInit): YabFetcher {
 
     const url = createURL(directURL, yabRequestInit.params);
 
-    const fetchRequest = _middlewares.reduce(
-      ({ url, init }, middleware) => {
-        return middleware(url, init);
-      },
-      { url, init: getRequestInit(yabRequestInit) }
-    );
-
     try {
-      return browserFetch(fetchRequest.url, fetchRequest.init);
-    } catch (err_1) {
-      return defaultErrorHandler(err_1);
+      const fetchRequest = requestInterceptor.applyRequest({
+        url,
+        init: getRequestInit(yabRequestInit)
+      });
+
+      const res = browserFetch(fetchRequest.url, fetchRequest.init);
+      return responseInterceptor.applyResponse(res, fetchRequest);
+    } catch (err) {
+      return defaultErrorHandler(err);
     }
   }) as YabFetcher;
 
@@ -54,9 +58,18 @@ export function createFetch(requestInit?: YabRequestInit): YabFetcher {
     ) => currentFetch(url, { method, data, ...yabInit });
   });
 
-  currentFetch.useMiddlewares = (...middlewares) => {
-    _middlewares.push(...middlewares);
-    console.log('middlewares:', middlewares);
+  // 扩展对象上方法，便于添加 interceptor
+  currentFetch.interceptor = {
+    request: {
+      use: (...handlers) => {
+        handlers.forEach((handler) => requestInterceptor.use(handler));
+      }
+    },
+    response: {
+      use: (...handlers) => {
+        handlers.forEach((handler) => responseInterceptor.use(handler));
+      }
+    }
   };
 
   return currentFetch;

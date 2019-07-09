@@ -5,28 +5,25 @@ export interface YabFetchParams {
   init: YabRequestInit;
 }
 
-export interface InterceptorManager {
-  interceptor: Set<Interceptor>;
-}
+export type RequestInterceptor = (res: YabFetchParams) => YabFetchParams;
 
-// TODO: 入参即出参
-export type Interceptor = (...args: any) => any[];
+export type ResponseInterceptor = (
+  res: Promise<Response>,
+  req: YabFetchParams
+) => Promise<Response>;
 
-export class InterceptorManager {
-  handlers: Interceptor[] = [];
+export class InterceptorManager<T> {
+  handlers: T[] = [];
 
-  public use(handler: Interceptor): void {
+  public use(handler: T): void {
     this.handlers.push(handler);
   }
 
-  public eject(): void {
-    this.handlers.pop();
+  public applyRequest(res: YabFetchParams) {
+    return this.handlers.reduce((acc, handler) => handler(acc), res);
   }
 
-  // excute order, from left
-  public apply(...args: any) {
-    return this.handlers
-      .reverse()
-      .reduce((acc, handle: Interceptor) => handle(...acc), args);
+  public applyResponse(res: Promise<Response>, req: YabFetchParams) {
+    return this.handlers.reduce((acc, handler) => handler(acc, req), res);
   }
 }

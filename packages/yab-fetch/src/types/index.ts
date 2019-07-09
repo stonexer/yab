@@ -1,5 +1,5 @@
 import { Method } from '../utils/method';
-import { Middleware } from '../utils/middleware';
+import { RequestInterceptor, ResponseInterceptor } from '../utils/interceptor';
 
 export type RequestHeaders = Record<string, string> | undefined;
 
@@ -18,7 +18,14 @@ export interface YabFetcher {
   post(url: string, data?: unknown, config?: YabRequestInit): Promise<unknown>;
   put(url: string, data?: unknown, config?: YabRequestInit): Promise<unknown>;
   patch(url: string, data?: unknown, config?: YabRequestInit): Promise<unknown>;
-  useMiddlewares(...middlewares: Middleware[]): void;
+  interceptor:  {
+    request : {
+      use: (...interceptors: RequestInterceptor[]) => void;
+    },
+    response : {
+      use: (...interceptors: ResponseInterceptor[]) => void;
+    }
+  }
 }
 
 export type MethodType = keyof typeof Method;

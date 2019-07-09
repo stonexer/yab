@@ -22,8 +22,7 @@ yab.interceptor.use({
 });
 
 // 已有对象上单独操作
-yab.interceptor.request.use([]);
-yab.interceptor.request.eject();
+yab.interceptor.request.use(() => {});
 
 yab.get('//a.b.c');
 ```
@@ -32,14 +31,16 @@ yab.get('//a.b.c');
 ## interceptor 函数定义
 
 ### request interceptor
+入参为 `req`
 ```typescript
-(reqOpts) => {
+(req) => {
   //
-  return requestOpts;
+  return req;
 }
 ```
 
 ### response interceptor
+入参为 `res`, `req`, 中间件返回 req 吧
 ```typescript
 (res, reqOpts) => {
 
