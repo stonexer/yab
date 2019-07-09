@@ -1,4 +1,3 @@
-import { hello } from './hello';
+import { createFetch } from './yabFetch';
 
-export const x = 42;
-export { hello };
+export default createFetch();
