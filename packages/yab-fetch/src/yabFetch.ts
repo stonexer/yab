@@ -1,36 +1,34 @@
-import {
-  YabRequestInit,
-  YabFetcher,
-  MethodType,
-  CreateYabRequestInit
-} from './types/index';
+import { YabRequestInit, YabFetcher, MethodType } from './types/index';
 import { getYabRequestInit, getRequestInit } from './utils/index';
+import { getPickUpResolver } from './resolvers/index';
+import { defaultErrorHandler } from './resolvers/default';
 
-function defaultErrorHandler(err: Error): Error {
-  // eslint-disable-next-line no-console
-  console.error(`Error in yab-fetch`, err);
-  throw err;
-}
+const DEFAULT_INIT: YabRequestInit = {
+  contentType: 'json',
+  onError: defaultErrorHandler
+};
 
 export function createFetch<TResponseType>(
-  requestInit: CreateYabRequestInit
+  requestInit?: YabRequestInit & {
+    resolveData?(res: Response): Promise<TResponseType>;
+  }
 ): YabFetcher<TResponseType> {
   const browserFetch = window.fetch;
 
   const currentFetch = ((url: string, directOptions?: YabRequestInit) => {
     const yabRequestInit = getYabRequestInit(
-      {
-        onError: defaultErrorHandler
-      },
+      { ...DEFAULT_INIT },
       requestInit,
       directOptions,
       { url }
     );
 
+    const pickUpResolver = getPickUpResolver(yabRequestInit);
+
     return browserFetch(
       yabRequestInit.url,
       getRequestInit(yabRequestInit)
-    ).then(yabRequestInit.resolveData, yabRequestInit.onError);
+    ).then(pickUpResolver, yabRequestInit.onError);
   }) as YabFetcher<TResponseType>;
 
   (['get', 'delete'] as MethodType[]).forEach((method) => {

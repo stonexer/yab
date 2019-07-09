@@ -9,16 +9,14 @@ export interface YabRequestInit extends RequestInit {
   params?: RequestParams;
   data?: unknown;
   url?: string;
-  resolveData?(data: Response): unknown;
+  contentType?: 'json' | 'text';
+  resolveData?(data: Response): Promise<unknown>;
   onError?(err: Error): unknown;
-}
-
-export interface CreateYabRequestInit extends YabRequestInit {
-  resolveData(data: Response): unknown;
 }
 
 export interface ExcutableYabRequestInit extends YabRequestInit {
   url: string;
+  contentType: 'json' | 'text';
   onError(err: Error): unknown;
 }
 
