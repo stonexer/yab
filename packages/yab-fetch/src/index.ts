@@ -1,3 +1,8 @@
 import { createFetch } from './yabFetch';
 
-export default createFetch();
+const yab = createFetch();
+
+export {
+  yab,
+  createFetch
+}
