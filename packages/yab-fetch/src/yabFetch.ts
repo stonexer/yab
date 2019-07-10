@@ -16,7 +16,7 @@ const DEFAULT_INIT: YabRequestInit = {
   onError: defaultErrorHandler
 };
 
-export function createFetch<TFetchResult = YabFetchContext>(
+export function createFetch<TFetchResult = IYabFetchContext>(
   requestInit?: YabRequestInit & {
     resolveData?(context: IYabFetchContext): Promise<TFetchResult>;
   }
@@ -34,7 +34,7 @@ export function createFetch<TFetchResult = YabFetchContext>(
 
     const context = new YabFetchContext(yabRequestInit);
 
-    const fetchMiddleware = async (ctx: YabFetchContext) => {
+    const fetchMiddleware = async (ctx: IYabFetchContext) => {
       const response = await browserFetch(
         yabRequestInit.url,
         getRequestInit(yabRequestInit)
@@ -51,8 +51,7 @@ export function createFetch<TFetchResult = YabFetchContext>(
       return yabRequestInit.resolveData(context);
     }
 
-    // TODO: fix
-    return context as unknown;
+    return context;
   }) as YabFetcher<TFetchResult>;
 
   (['get', 'delete'] as MethodType[]).forEach((method) => {
