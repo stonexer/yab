@@ -21,7 +21,7 @@ test('middleware: json', async () => {
     }
   });
 
-  fetcher.use(async (context: any, next) => {
+  fetcher.use(async (context, next) => {
     await next();
     context.json = await context.response.json();
   });
@@ -47,7 +47,7 @@ test('middleware: data', async () => {
     }
   });
 
-  fetcher.use(async (context: any, next) => {
+  fetcher.use(async (context, next) => {
     await next();
     const json = await context.response.json();
     context.data = json.data;
