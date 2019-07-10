@@ -1,4 +1,5 @@
 import { Method } from '../utils/method';
+import { RequestInterceptor, ResponseInterceptor } from '../utils/interceptor';
 
 export type RequestHeaders = Record<string, string> | undefined;
 
@@ -17,7 +18,7 @@ export interface CreateYabRequestInit extends YabRequestInit {
   resolveData(data: Response): unknown;
 }
 
-export interface ExcutableYabRequestInit extends YabRequestInit {
+export interface ExecutableYabRequestInit extends YabRequestInit {
   url: string;
   onError(err: Error): unknown;
 }
@@ -41,6 +42,14 @@ export interface YabFetcher<TResponseType> {
     data?: unknown,
     config?: YabRequestInit
   ): Promise<TResponseType>;
+  interceptor:  {
+    request : {
+      use: (...interceptors: RequestInterceptor[]) => void;
+    },
+    response : {
+      use: (...interceptors: ResponseInterceptor[]) => void;
+    }
+  }
 }
 
 export type MethodType = keyof typeof Method;
