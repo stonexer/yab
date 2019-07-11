@@ -1,32 +1,33 @@
 import 'whatwg-fetch';
 import { createFetch } from '../src/index';
-import {
-  RequestInterceptor,
-  InterceptorManager,
-  YabFetchInit
-} from '../src/utils/interceptor';
+import { RequestInterceptor, ExecutableYabRequestInit } from '../src/types';
+import { InterceptorManager } from '../src/utils/interceptor';
 
 test('interceptor.request.init', () => {
   const interceptor = new InterceptorManager<RequestInterceptor>();
   // logger
-  interceptor.use((({ url, init }) => {
-    return { url, init };
+  interceptor.use(((request) => {
+    console.log('logger:', request);
+    return request;
   }) as RequestInterceptor);
 
   // modify
-  interceptor.use(({ url, init }: YabFetchInit) => {
-    return { url: `${url}/test`, init: { ...init, a: 2 } };
+  interceptor.use((request) => {
+    const { url } = request;
+
+    return { ...request, url: `${url}/test` };
   });
 
-  expect(interceptor.handlers.length).toBe(2);
+  const onError = (err: Error) => console.error(`${err}`);
 
   const result = interceptor.applyRequest({
     url: 'url',
-    init: {}
+    onError
   });
+
   expect(result).toEqual({
     url: 'url/test',
-    init: { a: 2 }
+    onError
   });
 });
 
@@ -37,8 +38,8 @@ test('interceptor.withFetch', () => {
     resolveData: (response: Response) => response.json()
   });
 
-  const requestInterceptor: RequestInterceptor = ({ url, init }) => {
-    return { url: `${url}/test`, init };
+  const requestInterceptor: RequestInterceptor = (response) => {
+    return { ...response, url: `${response.url}/test` };
   };
 
   fetcher.interceptor.request.use(requestInterceptor);
