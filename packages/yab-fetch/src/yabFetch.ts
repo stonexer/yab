@@ -2,15 +2,13 @@ import {
   YabRequestInit,
   YabFetcher,
   MethodType,
-  CreateYabRequestInit
+  CreateYabRequestInit,
+  RequestInterceptor,
+  ResponseInterceptor
 } from './types/index';
 import { getYabRequestInit, getRequestInit } from './utils/index';
 
-import {
-  RequestInterceptor,
-  ResponseInterceptor,
-  InterceptorManager
-} from './utils/interceptor';
+import { InterceptorManager } from './utils/interceptor';
 
 function defaultErrorHandler(err: Error): Error {
   // eslint-disable-next-line no-console
@@ -35,12 +33,9 @@ export function createFetch<TResponseType>(
       { url }
     );
 
-    const fetchRequest = requestInterceptor.applyRequest({
-      url,
-      init: getRequestInit(yabRequestInit)
-    });
+    const fetchRequest = requestInterceptor.applyRequest(yabRequestInit);
 
-    return browserFetch(fetchRequest.url, fetchRequest.init).then(
+    return browserFetch(fetchRequest.url, getRequestInit(fetchRequest)).then(
       yabRequestInit.resolveData,
       yabRequestInit.onError
     );

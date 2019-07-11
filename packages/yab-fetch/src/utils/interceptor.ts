@@ -1,32 +1,26 @@
-import { YabRequestInit } from '../types/index';
-
-export interface YabFetchInit {
-  url: string;
-  init: YabRequestInit;
-}
-
-export type RequestInterceptor = (req: YabFetchInit) => YabFetchInit;
-
-export type ResponseInterceptor = (
-  req: YabFetchInit,
-  res?: Promise<Response>
-) => Promise<Response>;
+import {
+  ExecutableYabRequestInit,
+  RequestInterceptor,
+  ResponseInterceptor
+} from '../types/index';
 
 export class InterceptorManager<
   T extends RequestInterceptor | ResponseInterceptor
 > {
-  handlers: T[] = [];
+  private handlers: T[] = [];
 
   public use(handler: T): void {
     this.handlers.push(handler);
   }
 
-  public applyRequest(req: YabFetchInit) {
+  public applyRequest(req: ExecutableYabRequestInit): ExecutableYabRequestInit {
+    // TODO: resolve type warning
     return this.handlers.reduce((acc, handler) => handler(acc) as any, req);
   }
 
-  public applyResponse(req: YabFetchInit, res: Promise<Response>) {
+  public applyResponse(req: ExecutableYabRequestInit, res: Promise<Response>) {
     return this.handlers.reduce(
+      // TODO: resolve type warning
       (acc, handler) => handler(req, acc) as any,
       res
     );
