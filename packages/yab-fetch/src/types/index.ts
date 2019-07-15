@@ -10,7 +10,7 @@ export interface YabRequestInit extends RequestInit {
   data?: unknown;
   url?: string;
   contentType?: 'json' | 'text';
-  resolveData?(data: Response): Promise<unknown>;
+  resolveData?(context: IYabFetchContext): Promise<unknown>;
   onError?(err: Error): unknown;
 }
 
@@ -20,25 +20,38 @@ export interface ExcutableYabRequestInit extends YabRequestInit {
   onError(err: Error): unknown;
 }
 
-export interface YabFetcher<TResponseType> {
-  (url: string, init?: YabRequestInit): Promise<TResponseType>;
-  get(url: string, config?: YabRequestInit): Promise<TResponseType>;
-  delete(url: string, config?: YabRequestInit): Promise<TResponseType>;
+export interface YabFetcher<TFetchResult> {
+  (url: string, init?: YabRequestInit): Promise<TFetchResult>;
+  get(url: string, config?: YabRequestInit): Promise<TFetchResult>;
+  delete(url: string, config?: YabRequestInit): Promise<TFetchResult>;
   post(
     url: string,
     data?: unknown,
     config?: YabRequestInit
-  ): Promise<TResponseType>;
+  ): Promise<TFetchResult>;
   put(
     url: string,
     data?: unknown,
     config?: YabRequestInit
-  ): Promise<TResponseType>;
+  ): Promise<TFetchResult>;
   patch(
     url: string,
     data?: unknown,
     config?: YabRequestInit
-  ): Promise<TResponseType>;
+  ): Promise<TFetchResult>;
+  use(middlware: YabFetchMiddleware): void;
 }
 
 export type MethodType = keyof typeof Method;
+
+export interface IYabFetchContext {
+  // **Request**
+  yabRequestInit: YabRequestInit;
+
+  // **Response**
+  response: Response;
+}
+
+export interface YabFetchMiddleware {
+  (context: IYabFetchContext, next: () => Promise<unknown>): Promise<unknown>;
+}
