@@ -1,21 +1,30 @@
-import { YabRequestInit, YabFetcher, MethodType } from './types/index';
+import compose from 'koa-compose';
+
+import {
+  YabRequestInit,
+  YabFetcher,
+  MethodType,
+  YabFetchMiddleware,
+  IYabFetchContext
+} from './types/index';
 import { getYabRequestInit, getRequestInit } from './utils/index';
-import { getPickUpResolver } from './resolvers/index';
 import { defaultErrorHandler } from './resolvers/default';
+import { YabFetchContext } from './context';
 
 const DEFAULT_INIT: YabRequestInit = {
   contentType: 'json',
   onError: defaultErrorHandler
 };
 
-export function createFetch<TResponseType>(
+export function createFetch<TFetchResult = YabFetchContext>(
   requestInit?: YabRequestInit & {
-    resolveData?(res: Response): Promise<TResponseType>;
+    resolveData?(context: IYabFetchContext): Promise<TFetchResult>;
   }
-): YabFetcher<TResponseType> {
+): YabFetcher<TFetchResult> {
   const browserFetch = window.fetch;
+  const middlewares: YabFetchMiddleware[] = [];
 
-  const currentFetch = ((url: string, directOptions?: YabRequestInit) => {
+  const currentFetch = (async (url: string, directOptions?: YabRequestInit) => {
     const yabRequestInit = getYabRequestInit(
       { ...DEFAULT_INIT },
       requestInit,
@@ -23,13 +32,28 @@ export function createFetch<TResponseType>(
       { url }
     );
 
-    const pickUpResolver = getPickUpResolver(yabRequestInit);
+    const context = new YabFetchContext(yabRequestInit);
 
-    return browserFetch(
-      yabRequestInit.url,
-      getRequestInit(yabRequestInit)
-    ).then(pickUpResolver, yabRequestInit.onError);
-  }) as YabFetcher<TResponseType>;
+    const fetchMiddleware = async (ctx: YabFetchContext) => {
+      const response = await browserFetch(
+        yabRequestInit.url,
+        getRequestInit(yabRequestInit)
+      );
+
+      ctx.response = response;
+    };
+
+    const callback = compose([...middlewares, fetchMiddleware]);
+
+    await callback(context);
+
+    if (yabRequestInit.resolveData) {
+      return yabRequestInit.resolveData(context);
+    }
+
+    // TODO: fix
+    return context as unknown;
+  }) as YabFetcher<TFetchResult>;
 
   (['get', 'delete'] as MethodType[]).forEach((method) => {
     currentFetch[method] = (url: string, yabInit?: YabRequestInit) =>
@@ -43,6 +67,10 @@ export function createFetch<TResponseType>(
       yabInit?: YabRequestInit
     ) => currentFetch(url, { method, data, ...yabInit });
   });
+
+  currentFetch.use = (middleware: YabFetchMiddleware) => {
+    middlewares.push(middleware);
+  };
 
   return currentFetch;
 }
