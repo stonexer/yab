@@ -16,18 +16,23 @@ const DEFAULT_INIT: YabRequestInit = {
   onError: defaultErrorHandler
 };
 
-export function createFetch<TFetchResult = IYabFetchContext>(
-  requestInit?: YabRequestInit & {
-    resolveData?(context: IYabFetchContext): Promise<TFetchResult>;
-  }
-): YabFetcher<TFetchResult> {
-  const browserFetch = window.fetch;
-  const middlewares: YabFetchMiddleware[] = [];
+export class YabFetch {
+  private _requestInit?: YabRequestInit;
 
-  const currentFetch = (async (url: string, directOptions?: YabRequestInit) => {
+  private _middlewares: YabFetchMiddleware[];
+
+  public constructor(requestInit?: YabRequestInit) {
+    this._middlewares = [];
+    this._requestInit = requestInit;
+  }
+
+  public fetch = async (url: string, directOptions?: YabRequestInit) => {
+    // TODO: move to static
+    const browserFetch = window.fetch;
+
     const yabRequestInit = getYabRequestInit(
       { ...DEFAULT_INIT },
-      requestInit,
+      this._requestInit,
       directOptions,
       { url }
     );
@@ -47,7 +52,7 @@ export function createFetch<TFetchResult = IYabFetchContext>(
       }
     };
 
-    const callback = compose([...middlewares, fetchMiddleware]);
+    const callback = compose([...this._middlewares, fetchMiddleware]);
 
     await callback(context);
 
@@ -56,7 +61,21 @@ export function createFetch<TFetchResult = IYabFetchContext>(
     }
 
     return context;
-  }) as YabFetcher<TFetchResult>;
+  };
+
+  public use = (middleware: YabFetchMiddleware | YabFetchMiddleware[]) => {
+    if (Array.isArray(middleware)) {
+      this._middlewares.push(...middleware);
+    } else {
+      this._middlewares.push(middleware);
+    }
+  };
+}
+
+export function createFetch(requestInit?: YabRequestInit): YabFetcher<unknown> {
+  const yabFetch = new YabFetch(requestInit);
+
+  const currentFetch = yabFetch.fetch as YabFetcher<unknown>;
 
   (['get', 'delete'] as MethodType[]).forEach((method) => {
     currentFetch[method] = (url: string, yabInit?: YabRequestInit) =>
@@ -71,9 +90,7 @@ export function createFetch<TFetchResult = IYabFetchContext>(
     ) => currentFetch(url, { method, data, ...yabInit });
   });
 
-  currentFetch.use = (middleware: YabFetchMiddleware) => {
-    middlewares.push(middleware);
-  };
+  currentFetch.use = yabFetch.use;
 
   return currentFetch;
 }
