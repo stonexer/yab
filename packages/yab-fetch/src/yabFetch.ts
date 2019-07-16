@@ -35,12 +35,16 @@ export function createFetch<TFetchResult = IYabFetchContext>(
     const context = new YabFetchContext(yabRequestInit);
 
     const fetchMiddleware = async (ctx: IYabFetchContext) => {
-      const response = await browserFetch(
-        yabRequestInit.url,
-        getRequestInit(yabRequestInit)
-      );
+      try {
+        const response = await browserFetch(
+          yabRequestInit.url,
+          getRequestInit(yabRequestInit)
+        );
 
-      ctx.response = response;
+        ctx.response = response;
+      } catch (error) {
+        ctx.error = error;
+      }
     };
 
     const callback = compose([...middlewares, fetchMiddleware]);
