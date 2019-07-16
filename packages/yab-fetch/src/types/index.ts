@@ -51,7 +51,10 @@ export interface IYabFetchContext {
   // **Response**
   response: Response;
 
-  [key:string]: any;
+  [key: string]: any;
 }
 
-export type YabFetchMiddleware = (context: IYabFetchContext, next: () => Promise<unknown>) => void;
+export type YabFetchMiddleware = (
+  context: IYabFetchContext,
+  next: () => Promise<unknown>
+) => void;

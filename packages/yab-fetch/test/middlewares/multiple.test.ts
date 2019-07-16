@@ -11,30 +11,27 @@ test('middleware: json', async () => {
 
   const fetcher = createFetch();
 
+  const result: number[] = [];
+
   fetcher.use(async (context, next) => {
-    console.log('Before 1');
+    result.push(1);
     await next();
-    console.log('After 1');
+    result.push(2);
   });
 
   fetcher.use(async (context, next) => {
-    const retry = async () => {
-      await next();
-    }
-    console.log('Before 2');
+    result.push(3);
     await next();
-    console.log('After 2');
-    if (!lock) {
-      lock = true;
-      await retry();
-    }
+    result.push(4);
   });
 
   fetcher.use(async (context, next) => {
-    console.log('Before 3');
+    result.push(5);
     await next();
-    console.log('After 3');
+    result.push(6);
   });
 
-  const result = await fetcher('github.com');
+  await fetcher('github.com');
+
+  expect(result).toEqual([1, 3, 5, 6, 4, 2]);
 });
