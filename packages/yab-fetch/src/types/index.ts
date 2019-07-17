@@ -53,6 +53,9 @@ export interface IYabFetchContext {
   // **Response**
   response: Response;
 
+  json?: any;
+  text?: string;
+
   // **Error**
   error: YabFetchError | undefined;
 

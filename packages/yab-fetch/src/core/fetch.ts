@@ -56,6 +56,14 @@ function createFetchMiddleware(yabRequestInit: ExcutableYabRequestInit) {
           response
         });
       }
+
+      if (yabRequestInit.contentType === 'json') {
+        ctx.json = await response.json();
+      }
+
+      if (yabRequestInit.contentType === 'text') {
+        ctx.text = await response.text();
+      }
     } catch (error) {
       ctx.error = error;
     }
@@ -119,7 +127,7 @@ export function createFetch<TFetchResult>(
 
   (['get', 'delete'] as MethodType[]).forEach((method) => {
     currentFetch[method] = (url: string, yabInit?: YabRequestInit) =>
-      currentFetch(url, { method, ...yabInit });
+      currentFetch(url, { method, contentType: 'json', ...yabInit });
   });
 
   (['post', 'put', 'patch'] as MethodType[]).forEach((method) => {
