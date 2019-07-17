@@ -1,5 +1,8 @@
-import { YabRequestInit, IYabFetchContext } from '../types/index';
-import { YabFetchError } from './error';
+import {
+  YabRequestInit,
+  IYabFetchContext,
+  YabFetchError
+} from '../types/index';
 
 export class YabFetchContext implements IYabFetchContext {
   private _yabRequestInit: YabRequestInit;

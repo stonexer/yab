@@ -1,18 +1,4 @@
-import { ExcutableYabRequestInit } from '../types';
-
-interface YabFetchErrorOptions {
-  error?: Error;
-  errorMessage?: string;
-  yabRequestInit: ExcutableYabRequestInit;
-  requestInit: RequestInit;
-  response?: Response;
-}
-
-export interface YabFetchError extends Error {
-  yabRequestInit: ExcutableYabRequestInit;
-  requestInit: RequestInit;
-  response?: Response;
-}
+import { YabFetchErrorOptions, YabFetchError } from '../types';
 
 export function createError(options: YabFetchErrorOptions): YabFetchError {
   const error = (options.error ||
