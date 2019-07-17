@@ -20,7 +20,7 @@ test('fetch TypeError', async () => {
 
 test('fetch status 200', async () => {
   window.fetch = jest.fn(() =>
-    Promise.resolve(new Response('', { status: 200 }))
+    Promise.resolve(new Response('{}', { status: 200 }))
   );
 
   const fetcher = createFetch();
