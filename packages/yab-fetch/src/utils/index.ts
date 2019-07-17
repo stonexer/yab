@@ -51,5 +51,12 @@ export function getYabRequestInit(
 }
 
 export function getRequestInit(yabRequestInit: YabRequestInit): RequestInit {
-  return omit(yabRequestInit, ['onError', 'url', 'resolveData', 'contentType']);
+  // TODO: specify all keys in RequestInit
+  return omit(yabRequestInit, [
+    'onError',
+    'url',
+    'resolveData',
+    'contentType',
+    'validateResponseStatus'
+  ]);
 }

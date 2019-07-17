@@ -1,3 +1,3 @@
-import { createFetch } from './yabFetch';
+import { createFetch } from './core/yabFetch';
 
 export { createFetch };

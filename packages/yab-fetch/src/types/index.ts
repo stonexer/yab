@@ -1,4 +1,5 @@
 import { Method } from '../utils/method';
+import { YabFetchError } from '../core/error';
 
 export type RequestHeaders = Record<string, string> | undefined;
 
@@ -11,13 +12,14 @@ export interface YabRequestInit extends RequestInit {
   url?: string;
   contentType?: 'json' | 'text';
   resolveData?(context: IYabFetchContext): Promise<unknown>;
-  onError?(err: Error): unknown;
+  validateResponseStatus?(status: Response['status']): boolean;
+  before?(requestInit: RequestInit): RequestInit;
+  after?(response: Response): Response;
 }
 
 export interface ExcutableYabRequestInit extends YabRequestInit {
   url: string;
   contentType: 'json' | 'text';
-  onError(err: Error): unknown;
 }
 
 export interface YabFetcher<TFetchResult> {
@@ -50,6 +52,9 @@ export interface IYabFetchContext {
 
   // **Response**
   response: Response;
+
+  // **Error**
+  error: YabFetchError | undefined;
 
   [key: string]: any;
 }
