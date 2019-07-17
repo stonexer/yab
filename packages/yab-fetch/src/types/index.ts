@@ -1,5 +1,4 @@
 import { Method } from '../utils/method';
-import { YabFetchError } from '../core/error';
 
 export type RequestHeaders = Record<string, string> | undefined;
 
@@ -66,3 +65,17 @@ export type YabFetchMiddleware = (
   context: IYabFetchContext,
   next: () => Promise<unknown>
 ) => void;
+
+export interface YabFetchErrorOptions {
+  error?: Error;
+  errorMessage?: string;
+  yabRequestInit: ExcutableYabRequestInit;
+  requestInit: RequestInit;
+  response?: Response;
+}
+
+export interface YabFetchError extends Error {
+  yabRequestInit: ExcutableYabRequestInit;
+  requestInit: RequestInit;
+  response?: Response;
+}
