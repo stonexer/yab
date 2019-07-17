@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 
-import { createFetch } from '../../src/yabFetch';
+import { createFetch } from '../../src/core/fetch';
 import { IYabFetchContext } from '../../src/types';
 
 test('middleware: json', async () => {
@@ -8,15 +8,8 @@ test('middleware: json', async () => {
     Promise.resolve(new Response('{"data":"data"}'))
   );
 
-  // TODO: fix type
-  interface YabFetchContextWithJSON extends IYabFetchContext {
-    json: {
-      data: string;
-    };
-  }
-
   const fetcher = createFetch({
-    resolveData: async (context: YabFetchContextWithJSON) => {
+    resolveData: async (context: IYabFetchContext) => {
       return context.json;
     }
   });
@@ -36,13 +29,8 @@ test('middleware: data', async () => {
     Promise.resolve(new Response('{"data":"data"}'))
   );
 
-  // TODO: fix type
-  interface YabFetchContextWithData extends IYabFetchContext {
-    data: string;
-  }
-
   const fetcher = createFetch({
-    resolveData: async (context: YabFetchContextWithData) => {
+    async resolveData(context: IYabFetchContext) {
       return context.data;
     }
   });

@@ -1,9 +1,12 @@
-import { YabRequestInit, IYabFetchContext } from './types/index';
+import { YabRequestInit, IYabFetchContext } from '../types/index';
+import { YabFetchError } from './error';
 
 export class YabFetchContext implements IYabFetchContext {
   private _yabRequestInit: YabRequestInit;
 
   private _response?: Response;
+
+  private _error: YabFetchError | undefined;
 
   public constructor(init: YabRequestInit) {
     this._yabRequestInit = init;
@@ -27,5 +30,13 @@ export class YabFetchContext implements IYabFetchContext {
 
   public set response(response: Response) {
     this._response = response;
+  }
+
+  public get error() {
+    return this._error;
+  }
+
+  public set error(error: YabFetchError | undefined) {
+    this._error = error;
   }
 }

@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 
-import { createFetch } from '../../src/yabFetch';
+import { createFetch } from '../../src/core/fetch';
 import { IYabFetchContext } from '../../src/types';
 
 test('simple resolveData', async () => {

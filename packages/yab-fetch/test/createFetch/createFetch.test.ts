@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 
-import { createFetch } from '../../src/yabFetch';
+import { createFetch } from '../../src/core/fetch';
 
 test('createFetch', async () => {
   window.fetch = jest.fn(() => Promise.resolve(new Response('{}')));
