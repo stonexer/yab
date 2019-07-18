@@ -7,9 +7,9 @@ export type RequestParams = Record<string, string> | undefined;
 export interface YabRequestInit extends RequestInit {
   baseURL?: string;
   params?: RequestParams;
-  data?: unknown;
+  data?: any;
   url?: string;
-  contentType?: 'json' | 'text';
+  contentType?: 'auto' | 'json' | 'text';
   resolveData?(context: IYabFetchContext): Promise<unknown>;
   validateResponseStatus?(status: Response['status']): boolean;
   before?(requestInit: RequestInit): RequestInit;
@@ -18,12 +18,13 @@ export interface YabRequestInit extends RequestInit {
 
 export interface ExcutableYabRequestInit extends YabRequestInit {
   url: string;
-  contentType: 'json' | 'text';
+  contentType: 'json' | 'text' | 'auto';
 }
 
 export interface YabFetcher<TFetchResult> {
   (url: string, init?: YabRequestInit): Promise<TFetchResult>;
   get(url: string, config?: YabRequestInit): Promise<TFetchResult>;
+  head(url: string, config?: YabRequestInit): Promise<TFetchResult>;
   delete(url: string, config?: YabRequestInit): Promise<TFetchResult>;
   post(
     url: string,
@@ -52,12 +53,14 @@ export interface IYabFetchContext {
   // **Response**
   response: Response;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   json?: any;
   text?: string;
 
   // **Error**
   error: YabFetchError | undefined;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
