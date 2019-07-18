@@ -7,6 +7,7 @@ export type RequestParams = Record<string, string> | undefined;
 export interface YabRequestInit extends RequestInit {
   baseURL?: string;
   params?: RequestParams;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any;
   url?: string;
   contentType?: 'auto' | 'json' | 'text';

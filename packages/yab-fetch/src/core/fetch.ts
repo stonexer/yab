@@ -62,7 +62,9 @@ function createFetchMiddleware(yabRequestInit: ExcutableYabRequestInit) {
       if (yabRequestInit.contentType === 'auto') {
         try {
           ctx.json = await response.json();
-        } catch {}
+        } catch {
+          /* ignore */
+        }
       } else if (yabRequestInit.contentType === 'json') {
         ctx.json = await response.json();
       } else if (yabRequestInit.contentType === 'text') {
