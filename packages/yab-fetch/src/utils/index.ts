@@ -1,5 +1,4 @@
 import * as qs from 'qs';
-import omit from 'lodash.omit';
 
 import {
   YabRequestInit,
@@ -50,10 +49,12 @@ export function getYabRequestInit(
   return { ...init, url };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isJSONObject(val: any) {
   return val !== null && typeof val === 'object';
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isFormData(val: any) {
   return typeof FormData !== 'undefined' && val instanceof FormData;
 }
