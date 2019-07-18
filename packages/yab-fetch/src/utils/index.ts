@@ -50,13 +50,47 @@ export function getYabRequestInit(
   return { ...init, url };
 }
 
+export function isJSONObject(val: any) {
+  return val !== null && typeof val === 'object';
+}
+
+export function isFormData(val: any) {
+  return typeof FormData !== 'undefined' && val instanceof FormData;
+}
+
 export function getRequestInit(yabRequestInit: YabRequestInit): RequestInit {
-  // TODO: specify all keys in RequestInit
-  return omit(yabRequestInit, [
-    'onError',
-    'url',
-    'resolveData',
-    'contentType',
-    'validateResponseStatus'
-  ]);
+  const requestInit: RequestInit = {};
+
+  const { data } = yabRequestInit;
+
+  if (data != null) {
+    // TODO: handle all request body types
+    if (isFormData(data)) {
+      requestInit.body = data;
+    } else if (isJSONObject(data)) {
+      requestInit.body = JSON.stringify(data);
+    }
+  }
+
+  ([
+    'cache',
+    'credentials',
+    'headers',
+    'integrity',
+    'keepalive',
+    'method',
+    'mode',
+    'redirect',
+    'referrer',
+    'referrerPolicy',
+    'signal',
+    'window',
+    'body'
+  ] as (keyof RequestInit)[]).forEach((nativeRequestInitKey) => {
+    if (yabRequestInit[nativeRequestInitKey]) {
+      requestInit[nativeRequestInitKey] = yabRequestInit[nativeRequestInitKey];
+    }
+  });
+
+  return requestInit;
 }

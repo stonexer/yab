@@ -5,7 +5,7 @@ export function validateResponseStatus(status: Response['status']) {
 }
 
 export const DEFAULT_INIT: YabRequestInit = {
-  contentType: 'json',
+  contentType: 'auto',
 
   validateResponseStatus
 };

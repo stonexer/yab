@@ -29,6 +29,7 @@ function createFetchMiddleware(yabRequestInit: ExcutableYabRequestInit) {
       // fetch
       let response;
       try {
+        // >_ Send fetch Request
         response = await browserFetch(yabRequestInit.url, requestInit);
 
         if (yabRequestInit.after) {
@@ -57,11 +58,14 @@ function createFetchMiddleware(yabRequestInit: ExcutableYabRequestInit) {
         });
       }
 
-      if (yabRequestInit.contentType === 'json') {
+      // TODO: Handle all response types & maybe rename to responseType
+      if (yabRequestInit.contentType === 'auto') {
+        try {
+          ctx.json = await response.json();
+        } catch {}
+      } else if (yabRequestInit.contentType === 'json') {
         ctx.json = await response.json();
-      }
-
-      if (yabRequestInit.contentType === 'text') {
+      } else if (yabRequestInit.contentType === 'text') {
         ctx.text = await response.text();
       }
     } catch (error) {
@@ -96,12 +100,12 @@ export class YabFetch {
 
     await callback(context);
 
-    if (yabRequestInit.resolveData) {
-      return yabRequestInit.resolveData(context);
-    }
-
     if (context.error) {
       throw context.error;
+    }
+
+    if (yabRequestInit.resolveData) {
+      return yabRequestInit.resolveData(context);
     }
 
     return context;
@@ -113,6 +117,7 @@ export class YabFetch {
     } else {
       this._middlewares.push(middleware);
     }
+    return this;
   };
 }
 
@@ -125,7 +130,7 @@ export function createFetch<TFetchResult>(
 
   const currentFetch = yabFetch.fetch as YabFetcher<TFetchResult>;
 
-  (['get', 'delete'] as MethodType[]).forEach((method) => {
+  (['get', 'head', 'delete'] as MethodType[]).forEach((method) => {
     currentFetch[method] = (url: string, yabInit?: YabRequestInit) =>
       currentFetch(url, { method, contentType: 'json', ...yabInit });
   });
