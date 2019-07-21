@@ -1,1 +1,3 @@
-export const x = 42;
+import createCacheMiddleware from './cache/index';
+
+export { createCacheMiddleware };
