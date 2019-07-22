@@ -68,5 +68,17 @@
     "koa-compose": "^4.1.0",
     "lodash.omit": "^4.5.0",
     "qs": "^6.7.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js, ts}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
   }
 }
