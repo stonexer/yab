@@ -1,17 +1,17 @@
 import {
   IYabFetchContext,
   YabFetchError,
-  ExcutableYabRequestInit
+  ExecutableYabRequestInit
 } from '../types/index';
 
 export class YabFetchContext implements IYabFetchContext {
-  private _yabRequestInit: ExcutableYabRequestInit;
+  private _yabRequestInit: ExecutableYabRequestInit;
 
   private _response?: Response;
 
   private _error: YabFetchError | undefined;
 
-  public constructor(init: ExcutableYabRequestInit) {
+  public constructor(init: ExecutableYabRequestInit) {
     this._yabRequestInit = init;
   }
 
@@ -19,7 +19,7 @@ export class YabFetchContext implements IYabFetchContext {
     return this._yabRequestInit;
   }
 
-  public set yabRequestInit(init: ExcutableYabRequestInit) {
+  public set yabRequestInit(init: ExecutableYabRequestInit) {
     this._yabRequestInit = init;
   }
 
