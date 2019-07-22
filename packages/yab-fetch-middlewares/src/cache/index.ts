@@ -1,27 +1,54 @@
-import {
-  CacheOptions,
-  Middleware,
-  IYabFetchContext,
-  CacheStorage
-} from './types/index';
+import { IYabFetchContext, YabFetchMiddleware } from 'yab-fetch';
+import { CacheOptions, CacheStorage } from './types/index';
 import createIDBCache from './idb';
 
-function createCacheMiddleware(options: CacheOptions = {}): Middleware {
-  const store: CacheStorage = options.cache || createIDBCache();
+async function setCtxFromCache(
+  ctx: IYabFetchContext,
+  cache: CacheStorage,
+  key: string
+): Promise<boolean> {
+  const cacheData = await cache.get(key);
+
+  if (cacheData) {
+    ctx.json = cacheData.data;
+  }
+
+  return !!cacheData;
+}
+
+function createCacheMiddleware(options: CacheOptions = {}): YabFetchMiddleware {
+  const { cache = createIDBCache(), strategy = 'fallback' } = options;
 
   return async (ctx: IYabFetchContext, next: () => Promise<unknown>) => {
     const { url } = ctx.yabRequestInit;
-    const cacheData = await store.get(url);
 
-    if (cacheData) {
-      ctx.json = cacheData;
+    // strategy: always, just set json from cache.
+    if (strategy === 'always') {
+      const result = await setCtxFromCache(ctx, cache, url);
 
-      return;
+      if (result) {
+        return;
+      }
     }
 
-    await next();
+    try {
+      await next();
+    } catch (e) {
+      // strategy: fallback, set json from cache.
+      if (strategy === 'fallback') {
+        const result = await setCtxFromCache(ctx, cache, url);
 
-    store.set(url, ctx.json);
+        if (result) {
+          return;
+        }
+      }
+
+      // otherwise, rethrow error
+      throw e;
+    }
+
+    // update cache
+    cache.set(url, ctx.json);
   };
 }
 

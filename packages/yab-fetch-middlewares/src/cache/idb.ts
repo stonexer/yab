@@ -1,4 +1,4 @@
-import { CacheStorage } from './types/index';
+import { CacheStorage, CacheObject } from './types/index';
 import { promisifyRequest } from './utils';
 
 const DB_NAME = 'YabDB';
@@ -38,7 +38,7 @@ export class IDBCacheStorage implements CacheStorage {
       .objectStore(STORE_NAME);
   }
 
-  public async get(key: string): Promise<unknown> {
+  public async get(key: string): Promise<CacheObject> {
     if (!this._store) {
       await this.init();
     }

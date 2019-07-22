@@ -47,12 +47,12 @@
     "typescript": "^3.5.2",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "yab-fetch": "^0.0.0"
   },
   "files": [
     "dist"
   ],
-  "dependencies": {},
   "bugs": {
     "url": "https://github.com/stonexer/yab/issues"
   }
