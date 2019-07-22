@@ -17,7 +17,7 @@ export interface YabRequestInit extends RequestInit {
   after?(response: Response): Response;
 }
 
-export interface ExcutableYabRequestInit extends YabRequestInit {
+export interface ExecutableYabRequestInit extends YabRequestInit {
   url: string;
   contentType: 'json' | 'text' | 'auto';
 }
@@ -73,13 +73,13 @@ export type YabFetchMiddleware = (
 export interface YabFetchErrorOptions {
   error?: Error;
   errorMessage?: string;
-  yabRequestInit: ExcutableYabRequestInit;
+  yabRequestInit: ExecutableYabRequestInit;
   requestInit: RequestInit;
   response?: Response;
 }
 
 export interface YabFetchError extends Error {
-  yabRequestInit: ExcutableYabRequestInit;
+  yabRequestInit: ExecutableYabRequestInit;
   requestInit: RequestInit;
   response?: Response;
 }
