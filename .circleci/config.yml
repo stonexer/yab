@@ -2,6 +2,10 @@
 version: 2.1
 # alias
 
+# orbs: https://circleci.com/docs/2.0/using-orbs/
+orbs:
+  codecov: codecov/codecov@1.0.5
+
 # executors (requires version: 2.1)
 executors:
   node8:
@@ -50,6 +54,7 @@ jobs:
       - checkout
       - yarn_install
       - lerna_bootstrap
+      - lerna_lint
       - lerna_build
 
   test-node10:
