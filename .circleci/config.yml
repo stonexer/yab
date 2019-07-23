@@ -15,8 +15,6 @@ executors:
   node10:
     docker:
       - image: circleci/node:10
-    environment:
-      CODECOV_TOKEN: 5a1878cc-9e40-4d0f-9975-545b554b6fad
 
 # commands (requires version: 2.1)
 commands:
