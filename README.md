@@ -8,7 +8,7 @@ English | [简体中文](./README.zh-CN.md)
 </div>
 
 ## Introduction
-There is no good high-level libs base on Fetch API, so wo create yab.
+There is no good high-level libs base on Fetch API, so we create yab.
 
 ## Packages
 
