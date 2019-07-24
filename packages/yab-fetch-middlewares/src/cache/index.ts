@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { IYabFetchContext, YabFetchMiddleware } from 'yab-fetch';
 import { CacheOptions, CacheStorage } from './types/index';
 import createIDBCache from './idb';
