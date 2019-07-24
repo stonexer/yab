@@ -13,22 +13,20 @@ There is no good high-level libs base on Fetch API, so we create yab.
 ## Features
 - **Middleware**: koa like middleware.
 
-
-## Getting Started
-
-### Installation
-#### npm
+## Installation
+### npm
 `npm install yab-fetch`
 
-#### yarn
+### yarn
 `yarn add yab-fetch`
 
-#### CDN
+### CDN
 ```html
 <script src="https://unpkg.com/yab-fetch.min.js"></script>
 ```
 
-### Useage
+## Useage
+### Basic
 ```ts
 import { createFetch } from 'yab-fetch';
 
@@ -36,9 +34,9 @@ const request = createFetch();
 request.get('https://example.com');
 ```
 
-More API details, please read [Yab-fetch](./packages/yab-fetch/README.md)
+> **More API details, please read [Yab-fetch](./packages/yab-fetch/README.md)**
 
-#### fetch with middlewares
+### fetch with middlewares
 Yab-fetch can use koa like middleware, here is an example of useing [yab-fetch-middleware-cache](./packages/yab-fetch-middleware-cache).
 ```ts
 import { createFetch } from 'yab-fetch';
