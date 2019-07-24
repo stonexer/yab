@@ -10,6 +10,47 @@ English | [简体中文](./README.zh-CN.md)
 ## Introduction
 There is no good high-level libs base on Fetch API, so we create yab.
 
+## Features
+- **Middleware**: koa like middleware.
+
+
+## Getting Started
+
+### Installation
+#### npm
+`npm install yab-fetch`
+
+#### yarn
+`yarn add yab-fetch`
+
+#### CDN
+```html
+<script src="https://unpkg.com/yab-fetch.min.js"></script>
+```
+
+### Useage
+```ts
+import { createFetch } from 'yab-fetch';
+
+const request = createFetch();
+request.get('https://example.com');
+```
+
+More API details, please read [Yab-fetch](./packages/yab-fetch/README.md)
+
+#### fetch with middlewares
+Yab-fetch can use koa like middleware, here is an example of useing [yab-fetch-middleware-cache](./packages/yab-fetch-middleware-cache).
+```ts
+import { createFetch } from 'yab-fetch';
+import { createCacheMiddleware } from 'yab-fetch-middleware-cache';
+
+const request = createFetch();
+request.use(createCacheMiddleware());
+
+request.get('https://example.com');
+```
+
+
 ## Packages
 
 This repository is a monorepo that we manage using Lerna. That means that we actually publish several packages to npm from the same codebase, including:
@@ -19,12 +60,12 @@ This repository is a monorepo that we manage using Lerna. That means that we act
 | [`yab-fetch`](/packages/yab-fetch)                           | [![npm](https://img.shields.io/npm/v/yab-fetch.svg?style=flat-square)](https://www.npmjs.com/package/yab-fetch) | The fetch library.                                       |
 | [`yab-fetch-middleware-cache`](/packages/yab-fetch-middleware-cache) | [![npm](https://img.shields.io/npm/v/yab-fetch.svg?style=flat-square)](https://www.npmjs.com/package/yab-fetch) | A yab middleware, fouse on cache response using IndexDB. |
 
-## Documentation
-Please read each package's README.
-
 
 ## Changelog
 Detailed changes for each release are documented in [CHANGELOG.md](./CHANGELOG.md).
+
+## Contributors
+Thanks goes to the wonderful people.
 
 
 ## License
