@@ -2,18 +2,29 @@ English | [简体中文](./README.zh-CN.md)
 
 <p align="center"><img width="300" src="media/logo.png" alt="Vue logo" /></p>
 <div align="center">
-<p>Some tools fot fetch.</p>
+<p>Some tools for fetch.</p>
 <a href="https://circleci.com/gh/stonexer/yab/tree/master"><img src="https://circleci.com/gh/stonexer/yab/tree/master.svg?style=shield&circle-token=0386ba2e8d3d98f85b0c5e61977a8ded9cf95332" /></a>
 <a href="https://codecov.io/gh/stonexer/yab"><img src="https://codecov.io/gh/stonexer/yab/branch/master/graph/badge.svg" /></a>
 </div>
+
+---
 
 ## Introduction
 There is no good high-level libs base on Fetch API, so we create yab.
 
 ## Features
 - **Middleware**: koa like middleware.
+- **Fetch**: base on fetch API.
+- **TypeScript**: Include TypeScript definition
 
-## Installation
+
+
+## Browser Support
+This library can be used in the browser or on the server. A Fetch API polyfill may be needed.
+
+
+
+## Install
 ### npm
 `npm install yab-fetch`
 
@@ -26,19 +37,24 @@ There is no good high-level libs base on Fetch API, so we create yab.
 ```
 
 ## Useage
-> Here are some shortly useage of yab. For more API details, please read [Yab-fetch](./packages/yab-fetch/README.md)
+<details open>
+<summary><b>Basic Usage</summary>
 
-### Basic
+Create fetch instance.
+
 ```ts
 import { createFetch } from 'yab-fetch';
 
 const request = createFetch();
 request.get('https://example.com');
 ```
+</details>
 
+<details open>
+<summary><b>Middleware Usage</summary>
 
-### fetch with middlewares
 Yab-fetch can use koa like middleware, here is an example of useing [yab-fetch-middleware-cache](./packages/yab-fetch-middleware-cache).
+
 ```ts
 import { createFetch } from 'yab-fetch';
 import { createCacheMiddleware } from 'yab-fetch-middleware-cache';
@@ -48,7 +64,10 @@ request.use(createCacheMiddleware());
 
 request.get('https://example.com');
 ```
+</details>
 
+## Documents
+See full documents, please read [Yab-fetch](./packages/yab-fetch/README.md).
 
 ## Packages
 
