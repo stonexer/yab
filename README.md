@@ -26,6 +26,8 @@ There is no good high-level libs base on Fetch API, so we create yab.
 ```
 
 ## Useage
+> Here are some shortly useage of yab. For more API details, please read [Yab-fetch](./packages/yab-fetch/README.md)
+
 ### Basic
 ```ts
 import { createFetch } from 'yab-fetch';
@@ -34,7 +36,6 @@ const request = createFetch();
 request.get('https://example.com');
 ```
 
-> **More API details, please read [Yab-fetch](./packages/yab-fetch/README.md)**
 
 ### fetch with middlewares
 Yab-fetch can use koa like middleware, here is an example of useing [yab-fetch-middleware-cache](./packages/yab-fetch-middleware-cache).
