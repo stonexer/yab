@@ -53,8 +53,8 @@ jobs:
       - checkout
       - yarn_install
       - lerna_bootstrap
-      - lerna_lint
       - lerna_build
+      - lerna_lint
       - lerna_test
       - codecov/upload:
           file: packages/yab-fetch/coverage/*.json
