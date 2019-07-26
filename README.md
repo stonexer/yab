@@ -4,7 +4,7 @@ English | [简体中文](./README.zh-CN.md)
 <div align="center">
 <p>Some tools for fetch.</p>
 <a href="https://circleci.com/gh/stonexer/yab/tree/master"><img src="https://circleci.com/gh/stonexer/yab/tree/master.svg?style=shield&circle-token=0386ba2e8d3d98f85b0c5e61977a8ded9cf95332" /></a>
-<a href="https://codecov.io/gh/stonexer/yab"><img src="https://codecov.io/gh/stonexer/yab/branch/master/graph/badge.svg" /></a>
+<a href="https://codecov.io/gh/stonexer/yab"><img src="https://codecov.io/gh/stonexer/yab/branch/master/graph/badge.svg?token=d1CXXZJLby" /></a>
 </div>
 
 ---
