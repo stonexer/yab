@@ -1,6 +1,13 @@
-export const sum = (a: number, b: number) => {
-  if (process.env.NODE_ENV === 'development') {
-    console.log('boop');
-  }
-  return a + b;
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { IYabFetchContext, YabFetchMiddleware } from 'yab-fetch';
+import { Options } from './type';
+
+export const createLogger = (options: Options): YabFetchMiddleware => {
+  const { color } = options;
+
+  return async (ctx: IYabFetchContext, next: () => Promise<unknown>) => {
+    console.log('ctx before:', ctx);
+    await next();
+    console.log('ctx after:', ctx);
+  };
 };
