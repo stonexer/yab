@@ -5,7 +5,8 @@ import {
   getYabRequestInit,
   isJSONObject,
   isFormData,
-  getRequestInit
+  getRequestInit,
+  combineURL
 } from '../../src/utils/index';
 
 test('appendURLParams', () => {
@@ -17,10 +18,26 @@ test('appendURLParams', () => {
   );
 });
 
+test('combineURL', () => {
+  expect(combineURL('', '')).toEqual('/');
+  expect(combineURL('/', '/')).toEqual('/');
+  expect(combineURL('aaa.com/', '/bbb')).toEqual('aaa.com/bbb');
+  expect(combineURL('aaa.com', '/bbb')).toEqual('aaa.com/bbb');
+  expect(combineURL('aaa.com/', 'bbb')).toEqual('aaa.com/bbb');
+  expect(combineURL('aaa.com', 'bbb')).toEqual('aaa.com/bbb');
+});
+
 test('createURL', () => {
-  expect(createURL('aaa.com')).toEqual('aaa.com');
-  expect(createURL('aaa.com', { a: 1 })).toEqual('aaa.com?a=1');
-  expect(createURL('aaa.com?a=1', { b: 1 })).toEqual('aaa.com?a=1&b=1');
+  expect(createURL({ url: 'aaa.com' })).toEqual('aaa.com');
+  expect(createURL({ url: 'aaa.com', params: { a: '1' } })).toEqual(
+    'aaa.com?a=1'
+  );
+  expect(createURL({ url: 'aaa.com?a=1', params: { b: '1' } })).toEqual(
+    'aaa.com?a=1&b=1'
+  );
+  expect(
+    createURL({ url: 'aaa?a=1', baseURL: 'bbb.com', params: { b: '1' } })
+  ).toEqual('bbb.com/aaa?a=1&b=1');
 });
 
 test('isAbsoluteURL', () => {
