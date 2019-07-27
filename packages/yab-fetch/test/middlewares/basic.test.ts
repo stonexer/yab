@@ -19,6 +19,31 @@ test('resolve: json', async () => {
   expect(result).toEqual({ data: 'data' });
 });
 
+test('get/set context inside middleware', async () => {
+  window.fetch = jest.fn(() =>
+    Promise.resolve(new Response('{"data":"data"}'))
+  );
+
+  const fetcher = createFetch();
+
+  fetcher.use(async (context, next) => {
+    expect(context.yabRequestInit).toBeDefined();
+    expect(context.yabRequestInit.url).toEqual('github.com');
+
+    context.yabRequestInit.contentType = 'json';
+    expect(context.yabRequestInit.contentType).toEqual('json');
+
+    await next();
+
+    expect(context.json).toEqual({ data: 'data' });
+
+    context.success = true;
+    expect(context.success).toEqual(true);
+  });
+
+  await fetcher('github.com');
+});
+
 test('middleware: json', async () => {
   window.fetch = jest.fn(() =>
     Promise.resolve(new Response('{"data":"data"}'))
