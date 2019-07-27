@@ -35,6 +35,7 @@ export const createLogger = (options: Options): YabFetchMiddleware => {
       logger.group('after fetch', 'color:#61bb64');
       logger.log('response:', response);
       logger.groupEnd();
+      logger.groupEnd();
     } catch (e) {
       logger.groupEnd();
       logger.error(`Something wrong with fetch: ${e}`);

@@ -2,7 +2,7 @@
   "name": "yab-fetch-middleware-log",
   "version": "0.0.0",
   "main": "dist/index.js",
-  "module": "dist/xx.esm.js",
+  "module": "dist/yab-fetch-middleware-log.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -10,7 +10,6 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
-    "test": "tsdx test",
     "lint": "eslint --ext .ts src/ test/"
   },
   "husky": {
