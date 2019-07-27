@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
-    "lint": "eslint --ext .ts src/ test/"
+    "build": "tsdx build --format umd, cjs, esm",
+    "lint": "eslint --ext .ts src/"
   },
   "husky": {
     "hooks": {

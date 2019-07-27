@@ -18,3 +18,7 @@ const request = createFetch({
   middleware: [logger],
 });
 ```
+
+## Example
+
+![example](assets/log-example.png)
