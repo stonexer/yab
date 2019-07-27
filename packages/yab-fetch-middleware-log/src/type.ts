@@ -1,3 +1,3 @@
 export interface Options {
-  color: boolean;
+  collapsed: boolean;
 }
