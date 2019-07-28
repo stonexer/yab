@@ -1,13 +1,14 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { IYabFetchContext, YabFetchMiddleware } from 'yab-fetch';
-import { Options } from './type';
+import { Options, Logger } from './type';
+import { logBeforeFetch, logAfterFetch, logError } from './logHelper';
 
 export const createLogger = (options?: Options): YabFetchMiddleware => {
   const { collapsed = true } = options || {};
 
   const { log, error, groupCollapsed, group, groupEnd } = console;
 
-  const logger = {
+  const logger: Logger = {
     log,
     group: collapsed ? groupCollapsed : group,
     groupEnd,
@@ -16,7 +17,6 @@ export const createLogger = (options?: Options): YabFetchMiddleware => {
 
   return async (ctx: IYabFetchContext, next: () => Promise<unknown>) => {
     const {
-      yabRequestInit,
       yabRequestInit: { url, method },
     } = ctx;
 
@@ -26,17 +26,14 @@ export const createLogger = (options?: Options): YabFetchMiddleware => {
       'color: #005cc5;font-size: 14px;',
       'color: #666'
     );
-    logger.group('%cbefore fetch', 'color: #33b9f9');
-    logger.log('yabRequestInit:', yabRequestInit);
-    logger.groupEnd();
+
+    logBeforeFetch(logger, ctx);
+
     try {
       await next();
-      const { _response } = ctx;
-      logger.group('%cafter fetch', 'color:#61bb64');
-      logger.log('_response:', _response);
-      logger.groupEnd();
+      logAfterFetch(logger, ctx);
     } catch (e) {
-      logger.error(`Something wrong with fetch: ${e}`);
+      logError(logger, e);
     } finally {
       logger.groupEnd();
     }
