@@ -1,5 +1,3 @@
-English | [简体中文](./README.zh-CN.md)
-
 <p align="center"><img width="300" src="resources/logo.png" alt="logo" /></p>
 <div align="center">
 <p>A simple fetch library.</p>
@@ -42,7 +40,7 @@ This library can only be used in modern browser environment. [Polyfill](https://
 ## Useage
 
 <details open>
-<summary><b>Basic Usage</summary>
+<summary><b>Basic Usage</b></summary>
 
 ```ts
 import { createFetch } from "yab-fetch";
@@ -54,7 +52,7 @@ request.get("https://example.com");
 </details>
 
 <details open>
-<summary><b>Middleware Usage</summary>
+<summary><b>Middleware Usage</b></summary>
 
 ```ts
 import { createFetch } from "yab-fetch";
